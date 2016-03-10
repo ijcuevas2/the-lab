@@ -51,8 +51,18 @@ Plugin 'powerline/fonts'
 Bundle 'takac/vim-spotifysearch'
 
 " All of your Plugins must be added before the following line
+Bundle 'morhetz/gruvbox'
 
+Plugin 'chriskempson/base16'
+"Base 16 colors
+Plugin 'chriskempson/base16-vim'
+
+"Good Light Theme"
+Plugin 'jonathanfilip/vim-lucius'
 " call vundle#config#require(g:bundles)
+
+"Save Folds
+Plugin 'vim-scripts/restore_view.vim'
 
 call vundle#end()            " required
 filetype plugin on    " required
@@ -75,9 +85,21 @@ set shiftwidth=4
 set ignorecase
 set autoindent
 set expandtab
+set noswapfile
+set background=dark
+set clipboard=unnamed+
+set pastetoggle=<F2>
+set omnifunc=syntaxcomplete#Complete
 syntax on
-colorscheme molokai
-"set mouse=a
+colorscheme gruvbox
+
+"autocmd BufWinLeave *.* mkview!
+"autocmd BufWinEnter *.* silent loadview
+
+if &term =~ "xterm"
+     "set term=xterm-256color
+     set t_Co=256
+     endif
 
 if $COLORTERM == 'gnome-terminal'
   set t_Co=256
@@ -108,15 +130,16 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 "
 let g:airline#extensions#tabline#right_sep = ' '
-let g:airline#extensions#tabline#right_alt_sep = " "
 
-"let g:airline#extensions#tabline#show_tab_nr = 1
 
-let g:airline#extensions#tabline#tab_nr_type = 0 " # of splits (default)
+"let g:airline#extensions#tabline#show_tab_nr = 2
+
+"let g:airline#extensions#tabline#tab_nr_type = 0 " # of splits (default)
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
-let g:airline#extensions#tabline#tab_nr_type = 2 " splits and tab number
+"let g:airline#extensions#tabline#tab_nr_type = 2 " splits and tab number
 
 let g:airline_left_sep=''
 let g:airline_right_sep=''
 
 "let g:airline_powerline_fonts = 1
+"autocmd VimEnter * E
