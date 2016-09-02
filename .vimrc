@@ -79,7 +79,7 @@ filetype plugin on    " required
 " Put your non-Plugin stuff after this line
 
 set nu
-set rnu
+set nornu
 set tabstop=4
 set shiftwidth=4
 set ignorecase
