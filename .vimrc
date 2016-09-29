@@ -80,18 +80,22 @@ filetype plugin on    " required
 
 set nu
 set nornu
+set guifont=Consolas:h10
 set tabstop=4
 set shiftwidth=4
 set ignorecase
+set bs=2
 set autoindent
 set expandtab
 set noswapfile
 set background=dark
-set clipboard=unnamed+
 set pastetoggle=<F2>
 set omnifunc=syntaxcomplete#Complete
+"set list
 syntax on
 colorscheme gruvbox
+"AirlineToggleWhiteSpace
+
 
 "autocmd BufWinLeave *.* mkview!
 "autocmd BufWinEnter *.* silent loadview
@@ -109,13 +113,11 @@ map <up> <nop>
 map <down> <nop>
 map <left> <nop>
 map <right> <nop>
-map <C-c> <nop>
 
 imap <up> <nop>
 imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
-imap <C-c> <nop>
 
 "let g:airline#extensions#tabline#enabled = 1
 set laststatus=2
