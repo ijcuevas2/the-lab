@@ -64,6 +64,9 @@ Plugin 'jonathanfilip/vim-lucius'
 "Save Folds
 Plugin 'vim-scripts/restore_view.vim'
 
+"Mustang
+Plugin 'croaker/mustang-vim'
+
 call vundle#end()            " required
 filetype plugin on    " required
 " To ignore plugin indent changes, instead use:
@@ -80,7 +83,7 @@ filetype plugin on    " required
 
 set nu
 set nornu
-set guifont=Consolas:h10
+set guifont=Consolas
 set tabstop=4
 set shiftwidth=4
 set ignorecase
@@ -93,7 +96,7 @@ set pastetoggle=<F2>
 set omnifunc=syntaxcomplete#Complete
 "set list
 syntax on
-colorscheme gruvbox
+colorscheme mustang
 "AirlineToggleWhiteSpace
 
 
@@ -106,7 +109,7 @@ if &term =~ "xterm"
      endif
 
 if $COLORTERM == 'gnome-terminal'
-  set t_Co=256
+  set t_Co=2Mo56
   endif
 
 map <up> <nop>
