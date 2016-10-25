@@ -67,6 +67,9 @@ Plugin 'vim-scripts/restore_view.vim'
 "Mustang
 Plugin 'croaker/mustang-vim'
 
+"tcomment
+Plugin 'tomtom/tcomment_vim'
+
 call vundle#end()            " required
 filetype plugin on    " required
 " To ignore plugin indent changes, instead use:
