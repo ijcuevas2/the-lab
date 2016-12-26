@@ -33,6 +33,8 @@ values."
      javascript
      html
      python
+     react
+     latex
      ;; python
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -131,8 +133,7 @@ values."
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'text-mode
    ;; List of themes, the first of the list is loaded when spacemacs starts.
-   ;; Press <SPC> T n to cycle to the next theme in the list (works great
-   ;; with 2 themes variants, one dark and one light)
+   ;; Press <SPC> T n to cycle to the next theme in the list (works great ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark
                          spacemacs-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
@@ -319,7 +320,11 @@ you should place your code here."
    ;; (global-linum-mode)
    ;; (setq doc-view-continuous t)
    (desktop-save-mode 1)
-   ;; (desktop-auto-save-timeout 10)
+   (setq-default indent-tabs-mode t)
+   (setq tab-width 4)
+   (desktop-auto-save-timeout 10)
+   (turn-on-iimage-mode)
+   (iimage-mode-buffer t)
    ;; dotspacemacs-default-font '("Consolas" :size 8 :weight normal :width normal :powerline-offset 4)
    ;; (spacemacs/set-font "Menlo" 8)
   )
