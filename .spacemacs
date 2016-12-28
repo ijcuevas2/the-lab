@@ -35,16 +35,14 @@ values."
      python
      react
      latex
-     ;; python
+     pdf-tools
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
-     helm
+     ;; ---------------------------------------------------------------- helm
      ;; auto-completion
      ;; better-defaults
-     ;; python
      emacs-lisp
       git
       markdown
@@ -60,9 +58,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(
-   (mypackage :location (recipe :fetcher github :repo "politza/pdf-tools"))
-   )
+   dotspacemacs-additional-packages '(sublimity openwith)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -235,7 +231,7 @@ values."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -289,7 +285,7 @@ values."
    ;; `trailing' to delete only the whitespace at end of lines, `changed'to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
-   dotspacemacs-whitespace-cleanup nil
+   dotspacemacs-whitespace-cleanup 'trailing
    ))
 
 (defun dotspacemacs/user-init ()
@@ -316,35 +312,59 @@ you should place your code here."
         (sp-pair "'" nil :actions :rem)
         (sp-pair "\"" nil :actions :rem)))
    (remove-hook 'prog-mode-hook #'smartparens-mode)
-   (spacemacs/toggle-smartparens-globally-off)
+   ;; (spacemacs/toggle-smartparens-globally-off)
    ;; (global-linum-mode)
-   ;; (setq doc-view-continuous t)
+
+
+   ;; This is important as you will be asked to
+   ;; save the desktop everytime you exit if this
+   ;; is not included.
+   (desktop-auto-save-timeout 10)
+
    (desktop-save-mode 1)
    (setq-default indent-tabs-mode t)
    (setq tab-width 4)
-   (desktop-auto-save-timeout 10)
-   (turn-on-iimage-mode)
-   (iimage-mode-buffer t)
+
+   ;; Options for loading iimage-mode
+   ;; (turn-on-iimage-mode)
+   ;; (iimage-mode-buffer t)
+
+   ;;doc-view-mode-hook
+   ;; (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+   (add-hook 'pdf-view-mode-hook 'auto-revert-mode)
+
+   ;; add open-with hook
+   ;; (require 'openwith)
+   ;; (openwith-mode t)
+   ;; (setq openwith-associations '(("\\.pdf\\'" "google-chrome-stable" (file))))
+
+
    ;; dotspacemacs-default-font '("Consolas" :size 8 :weight normal :width normal :powerline-offset 4)
    ;; (spacemacs/set-font "Menlo" 8)
+   (defcustom sublimity-map-size 17
+     "width of the minimap"
+     :type 'integer
+     :group 'sublimity)
+   (sublimity-mode 1)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.:w
  ;; If there is more than one, they won't work right.
  )
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- ) (defun fontify-frame (frame)
-     (set-frame-parameter frame 'font "Consolas-10"))
-;; Fontify current frame
-(fontify-frame nil)
-;; Fontify any future frames
-(push 'fontify-frame after-make-frame-functions)
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  ) (defun fontify-frame (frame)
+;;      (set-frame-parameter frame 'font "Consolas-10"))
+;; ;; Fontify current frame
+;; (fontify-frame nil)
+;; ;; Fontify any future frames
+;; (push 'fontify-frame after-make-frame-functions)
