@@ -30,12 +30,15 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     haskell
      javascript
      html
      python
      react
      latex
      pdf-tools
+     c-c++
+     ess
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -44,8 +47,8 @@ values."
      ;; auto-completion
      ;; better-defaults
      emacs-lisp
-      git
-      markdown
+     git
+     markdown
      ;; org
       (shell :variables
              shell-default-height 30
@@ -62,7 +65,7 @@ values."
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(smartparens)
+   dotspacemacs-excluded-packages '()
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and uninstall any
@@ -137,7 +140,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 8
+                               :size 12
                                :weight normal
                                :width normal
                                :powerline-scale 1.0)
@@ -260,11 +263,11 @@ values."
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
 
-   ;; dotspacemacs-smartparens-strict-mode nil
+   dotspacemacs-smartparens-strict-mode t
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
    ;; over any automatically added closing parenthesis, bracket, quote, etc…
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
-   dotspacemacs-smart-closing-parenthesis nil
+   dotspacemacs-smart-closing-parenthesis t
    ;; Select a scope to highlight delimiters. Possible values are `any',
    ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
    ;; emphasis the current one). (default 'all)
@@ -296,6 +299,10 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (setq doc-view-continuous t)
+  (add-hook 'after-change-major-mode-hook (lambda() (electric-indent-mode -1)))
+  ;; (add-hook 'after-change-major-mode-hook (lambda() (global-set-key "\C-j" 'newline)))
+  ;; (global-set-key "\C-j" 'newline)
+  (global-set-key "\C-j" 'newline)
   )
 
 (defun dotspacemacs/user-config ()
@@ -305,13 +312,13 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-   (eval-after-load 'smartparens
-     '(progn
-        (sp-pair "(" nil :actions :rem)
-        (sp-pair "[" nil :actions :rem)
-        (sp-pair "'" nil :actions :rem)
-        (sp-pair "\"" nil :actions :rem)))
-   (remove-hook 'prog-mode-hook #'smartparens-mode)
+   ;; (eval-after-load 'smartparens
+   ;;   '(progn
+   ;;      (sp-pair "(" nil :actions :rem)
+   ;;      (sp-pair "[" nil :actions :rem)
+   ;;      (sp-pair "'" nil :actions :rem)
+   ;;      (sp-pair "\"" nil :actions :rem)))
+   ;; (remove-hook 'prog-mode-hook #'smartparens-mode)
    ;; (spacemacs/toggle-smartparens-globally-off)
    ;; (global-linum-mode)
 
@@ -322,7 +329,6 @@ you should place your code here."
    (desktop-auto-save-timeout 10)
 
    (desktop-save-mode 1)
-   (setq-default indent-tabs-mode t)
    (setq tab-width 4)
 
    ;; Options for loading iimage-mode
@@ -332,20 +338,16 @@ you should place your code here."
    ;;doc-view-mode-hook
    ;; (add-hook 'doc-view-mode-hook 'auto-revert-mode)
    (add-hook 'pdf-view-mode-hook 'auto-revert-mode)
+   (define-key global-map (kbd "RET") 'newline)
+   (setq-default indent-tabs-mode nil)
+   (setq python-shell-interpreter "ipython3")
+   ;; (define-key global-map (kbd "TAB") 'newline)
+
 
    ;; add open-with hook
    ;; (require 'openwith)
    ;; (openwith-mode t)
    ;; (setq openwith-associations '(("\\.pdf\\'" "google-chrome-stable" (file))))
-
-
-   ;; dotspacemacs-default-font '("Consolas" :size 8 :weight normal :width normal :powerline-offset 4)
-   ;; (spacemacs/set-font "Menlo" 8)
-   (defcustom sublimity-map-size 17
-     "width of the minimap"
-     :type 'integer
-     :group 'sublimity)
-   (sublimity-mode 1)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -354,9 +356,11 @@ you should place your code here."
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.:w
+ ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(package-selected-packages
+   (quote
+    (ess-smart-equals ess-R-object-popup ess-R-data-view ctable ess julia-mode disaster cmake-mode clang-format intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets company-ghci company-ghc ghc company haskell-mode cmm-mode helm magit auctex-latexmk js2-refactor yasnippet multiple-cursors yapfify xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit sublimity spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort pug-mode popwin pip-requirements persp-mode pdf-tools pcre2el paradox orgit org-plus-contrib org-bullets openwith open-junk-file neotree multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode json-mode js-doc info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump define-word cython-mode column-enforce-mode coffee-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
 ;; (custom-set-faces
 ;;  ;; custom-set-faces was added by Custom.
 ;;  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -368,3 +372,9 @@ you should place your code here."
 ;; (fontify-frame nil)
 ;; ;; Fontify any future frames
 ;; (push 'fontify-frame after-make-frame-functions)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

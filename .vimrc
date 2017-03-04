@@ -90,8 +90,8 @@ filetype plugin on    " required
 set nu
 set nornu
 set guifont=Consolas
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set ignorecase
 set bs=2
 set autoindent
