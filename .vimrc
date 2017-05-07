@@ -22,13 +22,14 @@ Plugin 'VundleVim/Vundle.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
-Plugin 'tpope/vim-fugitive'
+" Plugin 'tpope/vim-fugitive'
 " Git plugin not hosted on GitHub
-Plugin 'git://git.wincent.com/command-t.git'
+" Plugin 'git://git.wincent.com/command-t.git'
 " git repos on your local machine (i.e. when working on your own plugin)
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+
 "monokai"
 Plugin 'tomasr/molokai'
 
@@ -36,7 +37,7 @@ Plugin 'tomasr/molokai'
 "Plugin 'mkitt/tabline.vim'
 
 "Conque-Shell"
-Plugin 'vim-scripts/Conque-Shell'
+" Plugin 'vim-scripts/Conque-Shell'
 
 "bling airline"
 Plugin 'bling/vim-airline'
@@ -48,7 +49,7 @@ Plugin 'Shougo/vimproc.vim'
 Plugin 'Shougo/vimshell.vim'
 
 "Those Special Fonts"
-Plugin 'powerline/fonts'
+" Plugin 'powerline/fonts'
 
 "Spotify"
 Bundle 'takac/vim-spotifysearch'
@@ -73,6 +74,12 @@ Plugin 'croaker/mustang-vim'
 "tcomment
 Plugin 'tomtom/tcomment_vim'
 
+" delimiters
+Plugin 'Raimondi/delimitMate'
+
+"Typescript
+Plugin 'leafgarland/typescript-vim'
+
 call vundle#end()            " required
 filetype plugin on    " required
 " To ignore plugin indent changes, instead use:
@@ -89,7 +96,6 @@ filetype plugin on    " required
 
 set nu
 set nornu
-set guifont=Consolas
 set tabstop=2
 set shiftwidth=2
 set ignorecase
@@ -97,12 +103,13 @@ set bs=2
 set autoindent
 set expandtab
 set noswapfile
-set background=dark
+" set background=dark
 set pastetoggle=<F2>
 set omnifunc=syntaxcomplete#Complete
 "set list
 syntax on
 colorscheme mustang
+set mouse=
 "AirlineToggleWhiteSpace
 
 
@@ -118,16 +125,16 @@ if $COLORTERM == 'gnome-terminal'
   set t_Co=2Mo56
   endif
 
-map <up> <nop>
-map <down> <nop>
-map <left> <nop>
-map <right> <nop>
-
-imap <up> <nop>
-imap <down> <nop>
-imap <left> <nop>
-imap <right> <nop>
-
+"map <up> <nop>
+"map <down> <nop>
+"map <left> <nop>
+"map <right> <nop>
+"
+"imap <up> <nop>
+"imap <down> <nop>
+"imap <left> <nop>
+"imap <right> <nop>
+"
 "let g:airline#extensions#tabline#enabled = 1
 set laststatus=2
 

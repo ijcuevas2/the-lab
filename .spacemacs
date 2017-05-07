@@ -1,6 +1,5 @@
 ;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
-;; It must be stored in your home directory.
 
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
@@ -30,6 +29,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     (typescript :variables
+                 typescript-fmt-tool 'nil)
      haskell
      javascript
      html
@@ -133,8 +134,9 @@ values."
    dotspacemacs-scratch-mode 'text-mode
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+   dotspacemacs-themes '( mustang
+                          spacemacs-dark
+                          spacemacs-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
@@ -209,7 +211,8 @@ values."
    ;; in all non-asynchronous sources. If set to `source', preserve individual
    ;; source settings. Else, disable fuzzy matching in all sources.
    ;; (default 'always)
-   dotspacemacs-helm-use-fuzzy 'always
+
+dotspacemacs-helm-use-fuzzy 'always
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content. (default nil)
    dotspacemacs-enable-paste-transient-state nil
@@ -298,12 +301,14 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-  (setq doc-view-continuous t)
-  (add-hook 'after-change-major-mode-hook (lambda() (electric-indent-mode -1)))
+  (setq pdf-view-continuous t)
+  ;; (add-hook 'after-change-major-mode-hook (lambda() (electric-indent-mode -1)))
   ;; (add-hook 'after-change-major-mode-hook (lambda() (global-set-key "\C-j" 'newline)))
   ;; (global-set-key "\C-j" 'newline)
-  (global-set-key "\C-j" 'newline)
-  )
+  ;; (global-set-key "\C-j" 'newline)
+  ;; (global-set-key "RET" 'newline)
+  (when (fboundp 'electric-indent-mode) (electric-indent-mode -1))
+)
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -322,14 +327,18 @@ you should place your code here."
    ;; (spacemacs/toggle-smartparens-globally-off)
    ;; (global-linum-mode)
 
-
+   ;; auto-indent
+  (setq spacemacs-indent-sensitive-modes
+        (add-to-list 'spacemacs-indent-sensitive-modes 'typescript-mode))
+  ;; javascript-mode
+  (setq spacemacs-indent-sensitive-modes (add-to-list 'spacemacs-indent-sensitive-modes 'typescript-mode))
    ;; This is important as you will be asked to
    ;; save the desktop everytime you exit if this
    ;; is not included.
    (desktop-auto-save-timeout 10)
 
    (desktop-save-mode 1)
-   (setq tab-width 4)
+   ;; (setq tab-width 2)
 
    ;; Options for loading iimage-mode
    ;; (turn-on-iimage-mode)
@@ -338,16 +347,53 @@ you should place your code here."
    ;;doc-view-mode-hook
    ;; (add-hook 'doc-view-mode-hook 'auto-revert-mode)
    (add-hook 'pdf-view-mode-hook 'auto-revert-mode)
-   (define-key global-map (kbd "RET") 'newline)
+   ;; (define-key global-map (kbd "RET") 'newline)
    (setq-default indent-tabs-mode nil)
    (setq python-shell-interpreter "ipython3")
    ;; (define-key global-map (kbd "TAB") 'newline)
+   (defun my-expand-lines ()
+     (interactive)
+     (let ((hippie-expand-try-functions-list
+            '(try-expand-line)))
+       (call-interactively 'hippie-expand)))
+   (define-key evil-insert-state-map (kbd "C-x C-l") 'my-expand-lines)
 
+   (defhydra hydra-hippie-line (global-map "C-x")
+     "Expand Line"
+     ("l" my-expand-lines "hippie line")
+     ("q" evil-escape "quit"))
+   ;; dummy
+   (defun silence ()
+     (interactive))
 
-   ;; add open-with hook
+   ;; don't jump the cursor around in the window on clicking
+   (define-key evil-motion-state-map [down-mouse-1] 'silence)
+   ;; also avoid any'<mouse-1> is undefined' when setting to 'undefined
+   (define-key evil-motion-state-map [mouse-1] 'silence)
+   (define-key evil-motion-state-map [mouse-2] 'silence)
+   (define-key evil-motion-state-map [mouse-3] 'silence)
+   (define-key evil-motion-state-map [mouse-4] 'silence)
+   (define-key evil-motion-state-map [mouse-5] 'silence)
+      ;; add open-with hook
    ;; (require 'openwith)
    ;; (openwith-mode t)
    ;; (setq openwith-associations '(("\\.pdf\\'" "google-chrome-stable" (file))))
+   (defun my-web-mode-hook ()
+     (setq web-mode-enable-auto-pairing nil))
+
+   (add-hook 'web-mode-hook  'my-web-mode-hook)
+
+   (defun sp-web-mode-is-code-context (id action context)
+     (and (eq action 'insert)
+          (not (or (get-text-property (point) 'part-side)
+                   (get-text-property (point) 'block-side)))))
+
+   (sp-local-pair 'web-mode "<" nil :when '(sp-web-mode-is-code-context))
+
+   ;; auto indent
+   (spacemacs/toggle-indent-guide off)
+
+   ;; sensitive stuff
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -360,7 +406,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ess-smart-equals ess-R-object-popup ess-R-data-view ctable ess julia-mode disaster cmake-mode clang-format intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets company-ghci company-ghc ghc company haskell-mode cmm-mode helm magit auctex-latexmk js2-refactor yasnippet multiple-cursors yapfify xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit sublimity spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort pug-mode popwin pip-requirements persp-mode pdf-tools pcre2el paradox orgit org-plus-contrib org-bullets openwith open-junk-file neotree multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode json-mode js-doc info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump define-word cython-mode column-enforce-mode coffee-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
+    (projectile avy packed smartparens evil helm-core hydra f tide typescript-mode tern tablist org markdown-mode skewer-mode simple-httpd json-snatcher json-reformat js2-mode haml-mode gitignore-mode magit-popup git-commit with-editor pythonic ess-smart-equals ess-R-object-popup ess-R-data-view ctable ess julia-mode disaster cmake-mode clang-format intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets company-ghci company-ghc ghc company haskell-mode cmm-mode helm magit auctex-latexmk js2-refactor yasnippet multiple-cursors yapfify xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit sublimity spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort pug-mode popwin pip-requirements persp-mode pdf-tools pcre2el paradox orgit org-plus-contrib org-bullets openwith open-junk-file neotree multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode json-mode js-doc info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump define-word cython-mode column-enforce-mode coffee-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
 ;; (custom-set-faces
 ;;  ;; custom-set-faces was added by Custom.
 ;;  ;; If you edit it by hand, you could mess it up, so be careful.
