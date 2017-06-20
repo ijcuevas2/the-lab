@@ -29,6 +29,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     vimscript
      (typescript :variables
                  typescript-fmt-tool 'nil)
      haskell
@@ -142,7 +143,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 12
+                               :size 18
                                :weight normal
                                :width normal
                                :powerline-scale 1.0)
@@ -328,16 +329,16 @@ you should place your code here."
    ;; (global-linum-mode)
 
    ;; auto-indent
-  (setq spacemacs-indent-sensitive-modes
-        (add-to-list 'spacemacs-indent-sensitive-modes 'typescript-mode))
+  ;; (setq spacemacs-indent-sensitive-modes
+  ;;       (add-to-list 'spacemacs-indent-sensitive-modes 'typescript-mode))
   ;; javascript-mode
-  (setq spacemacs-indent-sensitive-modes (add-to-list 'spacemacs-indent-sensitive-modes 'typescript-mode))
+  ;; (setq spacemacs-indent-sensitive-modes (add-to-list 'spacemacs-indent-sensitive-modes 'typescript-mode))
    ;; This is important as you will be asked to
    ;; save the desktop everytime you exit if this
    ;; is not included.
-   (desktop-auto-save-timeout 10)
+   ;; (desktop-auto-save-timeout 10)
 
-   (desktop-save-mode 1)
+   ;; (desktop-save-mode 1)
    ;; (setq tab-width 2)
 
    ;; Options for loading iimage-mode
@@ -349,19 +350,19 @@ you should place your code here."
    (add-hook 'pdf-view-mode-hook 'auto-revert-mode)
    ;; (define-key global-map (kbd "RET") 'newline)
    (setq-default indent-tabs-mode nil)
-   (setq python-shell-interpreter "ipython3")
+   ;; (setq python-shell-interpreter "ipython3")
    ;; (define-key global-map (kbd "TAB") 'newline)
-   (defun my-expand-lines ()
-     (interactive)
-     (let ((hippie-expand-try-functions-list
-            '(try-expand-line)))
-       (call-interactively 'hippie-expand)))
-   (define-key evil-insert-state-map (kbd "C-x C-l") 'my-expand-lines)
+   ;; (defun my-expand-lines ()
+   ;;   (interactive)
+   ;;   (let ((hippie-expand-try-functions-list
+   ;;          '(try-expand-line)))
+   ;;     (call-interactively 'hippie-expand)))
+   ;; (define-key evil-insert-state-map (kbd "C-x C-l") 'my-expand-lines)
 
-   (defhydra hydra-hippie-line (global-map "C-x")
-     "Expand Line"
-     ("l" my-expand-lines "hippie line")
-     ("q" evil-escape "quit"))
+   ;; (defhydra hydra-hippie-line (global-map "C-x")
+   ;;   "Expand Line"
+   ;;   ("l" my-expand-lines "hippie line")
+   ;;   ("q" evil-escape "quit"))
    ;; dummy
    (defun silence ()
      (interactive))
@@ -391,7 +392,7 @@ you should place your code here."
    (sp-local-pair 'web-mode "<" nil :when '(sp-web-mode-is-code-context))
 
    ;; auto indent
-   (spacemacs/toggle-indent-guide off)
+   ;; (spacemacs/toggle-indent-guide off)
 
    ;; sensitive stuff
   )
