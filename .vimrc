@@ -63,7 +63,7 @@ Plugin 'jonathanfilip/vim-lucius'
 " call vundle#config#require(g:bundles)
 
 "Save Folds
-Plugin 'vim-scripts/restore_view.vim'
+Plugin 'vim-scripts/restore_view.vim' 
 
 "Mustang
 Plugin 'croaker/mustang-vim'
@@ -77,6 +77,17 @@ Plugin 'Raimondi/delimitMate'
 "Typescript
 Plugin 'leafgarland/typescript-vim'
 
+" Swift
+Plugin 'keith/swift.vim'
+
+" Nerdtree
+Plugin 'scrooloose/nerdtree'
+
+"nvim
+Plugin 'kassio/neoterm'
+
+"Python
+Plugin 'hdima/python-syntax'
 call vundle#end()            " required
 filetype plugin on    " required
 " To ignore plugin indent changes, instead use:
@@ -107,7 +118,12 @@ set omnifunc=syntaxcomplete#Complete
 syntax on
 colorscheme mustang
 set mouse=
+" Tmap 'ls' 
 "AirlineToggleWhiteSpace
+"
+"NerdTree Toggle
+map <C-o> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 
 "autocmd BufWinLeave *.* mkview!

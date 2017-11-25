@@ -36,11 +36,11 @@ values."
      javascript
      html
      python
+     ipython-notebook
      react
      latex
      pdf-tools
      c-c++
-     ess
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -51,6 +51,7 @@ values."
      emacs-lisp
      git
      markdown
+     osx
      ;; org
       (shell :variables
              shell-default-height 30
@@ -130,12 +131,14 @@ values."
    ;; (default nil)
    dotspacemacs-startup-lists '()
    ;; True if the home buffer should respond to resize events.
-   dotspacemacs-startup-buffer-responsive t
+   dotspacemacs-startup-bufer-responsive t
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'text-mode
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '( mustang
+   dotspacemacs-themes '(  monokai
+                           sanityinc-solarized-dark
+                           mustang
                           spacemacs-dark
                           spacemacs-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
@@ -143,7 +146,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 18
+                               :size 11
                                :weight normal
                                :width normal
                                :powerline-scale 1.0)
@@ -395,6 +398,21 @@ you should place your code here."
    ;; (spacemacs/toggle-indent-guide off)
 
    ;; sensitive stuff
+   (use-package pdf-tools
+  :ensure t
+  :config
+  (custom-set-variables
+    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
+  (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
+	(pdf-tools-install)
+
+  (add-hook 'doc-view-mode-hook
+            (lambda ()
+              (linum-mode -1)
+              ))
+
+  (require 'helm-bookmark)
+  (setq python-shell-interpreter "ipython3")
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -405,9 +423,12 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(package-selected-packages
    (quote
-    (projectile avy packed smartparens evil helm-core hydra f tide typescript-mode tern tablist org markdown-mode skewer-mode simple-httpd json-snatcher json-reformat js2-mode haml-mode gitignore-mode magit-popup git-commit with-editor pythonic ess-smart-equals ess-R-object-popup ess-R-data-view ctable ess julia-mode disaster cmake-mode clang-format intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets company-ghci company-ghc ghc company haskell-mode cmm-mode helm magit auctex-latexmk js2-refactor yasnippet multiple-cursors yapfify xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit sublimity spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort pug-mode popwin pip-requirements persp-mode pdf-tools pcre2el paradox orgit org-plus-contrib org-bullets openwith open-junk-file neotree multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode json-mode js-doc info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump define-word cython-mode column-enforce-mode coffee-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
+    (helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern company-statistics company-cabal company-c-headers company-auctex company-anaconda auto-yasnippet ac-ispell ein request-deferred auto-complete websocket deferred vimrc-mode reveal-in-osx-finder pbcopy osx-trash osx-dictionary launchctl dash-functional dactyl-mode projectile avy packed smartparens evil helm-core hydra f tide typescript-mode tern tablist org markdown-mode skewer-mode simple-httpd json-snatcher json-reformat js2-mode haml-mode gitignore-mode magit-popup git-commit with-editor pythonic ess-smart-equals ess-R-object-popup ess-R-data-view ctable ess julia-mode disaster cmake-mode clang-format intero flycheck hlint-refactor hindent helm-hoogle haskell-snippets company-ghci company-ghc ghc company haskell-mode cmm-mode helm magit auctex-latexmk js2-refactor yasnippet multiple-cursors yapfify xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit sublimity spacemacs-theme spaceline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort pug-mode popwin pip-requirements persp-mode pdf-tools pcre2el paradox orgit org-plus-contrib org-bullets openwith open-junk-file neotree multi-term move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode json-mode js-doc info+ indent-guide ido-vertical-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-ag google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump define-word cython-mode column-enforce-mode coffee-mode clean-aindent-mode auto-highlight-symbol auto-compile auctex anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+ '(pdf-tools-handle-upgrades nil))
 ;; (custom-set-faces
 ;;  ;; custom-set-faces was added by Custom.
 ;;  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -424,4 +445,4 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((((class color) (min-colors 257)) (:foreground "#F8F8F2" :background "#272822")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background "#1B1E1C")))))
