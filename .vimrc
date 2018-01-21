@@ -88,6 +88,13 @@ Plugin 'kassio/neoterm'
 
 "Python
 Plugin 'hdima/python-syntax'
+
+" javascript
+Plugin 'jelera/vim-javascript-syntax'
+
+" Splits
+Plugin 'christoomey/vim-tmux-navigator'
+
 call vundle#end()            " required
 filetype plugin on    " required
 " To ignore plugin indent changes, instead use:
@@ -117,7 +124,14 @@ set omnifunc=syntaxcomplete#Complete
 "set list
 syntax on
 colorscheme mustang
-set mouse=
+set mouse=nicr
+
+nmap <LeftMouse> <nop>
+imap <LeftMouse> <nop>
+vmap <LeftMouse> <nop>
+nmap <2-LeftMouse> <nop>
+nmap <3-LeftMouse> <nop>
+
 " Tmap 'ls' 
 "AirlineToggleWhiteSpace
 "

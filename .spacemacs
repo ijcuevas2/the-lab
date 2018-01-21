@@ -34,6 +34,7 @@ values."
                  typescript-fmt-tool 'nil)
      haskell
      javascript
+		 react
      html
      python
      ipython-notebook
@@ -46,7 +47,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ---------------------------------------------------------------- helm
-     ;; auto-completion
+     auto-completion
      ;; better-defaults
      emacs-lisp
      git
@@ -136,17 +137,17 @@ values."
    dotspacemacs-scratch-mode 'text-mode
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(  monokai
+   dotspacemacs-themes '(  spacemacs-dark
+                           monokai
                            sanityinc-solarized-dark
                            mustang
-                          spacemacs-dark
                           spacemacs-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 11
+                               :size 12
                                :weight normal
                                :width normal
                                :powerline-scale 1.0)
@@ -331,6 +332,8 @@ you should place your code here."
    ;; (spacemacs/toggle-smartparens-globally-off)
    ;; (global-linum-mode)
 
+  (setq backup-directory-alist `(("." . "~/.saves")))
+  (setq backup-by-copying t)
    ;; auto-indent
   ;; (setq spacemacs-indent-sensitive-modes
   ;;       (add-to-list 'spacemacs-indent-sensitive-modes 'typescript-mode))
@@ -413,6 +416,26 @@ you should place your code here."
 
   (require 'helm-bookmark)
   (setq python-shell-interpreter "ipython3")
+
+  ;; date and time
+  ;; (spacemacs|define-mode-line-segment date-time-segment
+  ;;                                     (shell-command-to-string "echo -n $(date +%k:%M--%m-%d)")
+  ;;                                     )
+  ;; (add-to-list 'spacemacs-mode-line-right 'date-time-segment)
+  (display-time-mode 1)
+
+  ;; javascript indent
+  (setq-default js2-basic-offset 2)
+  (setq-default js-indent-level 2)
+
+  (defun my-web-mode-hook ()
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-indent-style 2)
+    )
+
+  (add-hook 'web-mode-hook  'my-web-mode-hook)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -445,4 +468,5 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 257)) (:foreground "#F8F8F2" :background "#272822")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background "#1B1E1C")))))
+ ;; '(default ((((class color) (min-colors 257)) (:foreground "#F8F8F2" :background "#272822")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background "#1B1E1C"))))
+ )
