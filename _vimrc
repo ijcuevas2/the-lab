@@ -30,11 +30,11 @@ Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
 
 Plug 'tomasr/molokai' 
 
+Plug 'sainnhe/sonokai' 
+
 Plug 'tpope/vim-commentary'
 
 Plug '907th/vim-auto-save'
-
-Plug 'kien/ctrlp.vim'
 
 " Initialize plugin system
 call plug#end()
@@ -56,10 +56,22 @@ set pastetoggle=<F2>
 set omnifunc=syntaxcomplete#Complete
 "set list
 syntax on
-colorscheme molokai
+colorscheme sonokai
 set mouse=nicr
 set guifont=Consolas:h14
+set guioptions+=b
+set wrap!
+" set sidescroll=1
 
+nnoremap <C-F> :promptfind <Enter>
+" nnoremap <S-ScrollWheelUp>   <ScrollWheelLeft>
+" nnoremap <S-2-ScrollWheelUp> <2-ScrollWheelLeft>
+" nnoremap <S-3-ScrollWheelUp> <3-ScrollWheelLeft>
+" nnoremap <S-4-ScrollWheelUp> <4-ScrollWheelLeft>
+" nnoremap <S-ScrollWheelDown>     <ScrollWheelRight>
+" nnoremap <S-2-ScrollWheelDown>   <2-ScrollWheelRight>
+" nnoremap <S-3-ScrollWheelDown>   <3-ScrollWheelRight>
+" nnoremap <S-4-ScrollWheelDown>   <4-ScrollWheelRight>
 
 " qnmap <LeftMouse> <nop>
 " qimap <LeftMouse> <nop>
