@@ -1,13 +1,3 @@
-
-" let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-" if empty(glob(data_dir . '/autoload/plug.vim'))
-"   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-"   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-" endif
-
-" Specify a directory for plugins
-" - For Neovim: stdpath('data') . '/plugged'
-" - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/vimfiles/bundle')
 
 " Make sure you use single quotes
@@ -16,7 +6,7 @@ call plug#begin('~/vimfiles/bundle')
 Plug 'https://github.com/junegunn/vim-github-dashboard.git'
 
 " On-demand loading
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+" Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 " Using a non-default branch
@@ -28,13 +18,25 @@ Plug 'fatih/vim-go', { 'tag': '*' }
 " Plugin options
 Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
 
-Plug 'tomasr/molokai' 
+Plug 'tomasr/molokai'
 
-Plug 'sainnhe/sonokai' 
+Plug 'sainnhe/sonokai'
 
 Plug 'tpope/vim-commentary'
 
+Plug 'croaker/mustang-vim'
+
 Plug '907th/vim-auto-save'
+
+Plug 'lervag/vimtex'
+
+Plug 'morhetz/gruvbox'
+
+Plug 'SirVer/ultisnips'
+
+Plug 'Raimondi/delimitMate'
+
+Plug 'yegappan/mru'
 
 " Initialize plugin system
 call plug#end()
@@ -43,53 +45,23 @@ call plug#end()
 let g:auto_save = 1  " enable AutoSave on Vim startup
 
 set nu
-set nornu
+set rnu
 set tabstop=2
 set shiftwidth=2
 set ignorecase
 set bs=2
-set autoindent
 set expandtab
 set noswapfile
-" set background=dark
+set background=dark
 set pastetoggle=<F2>
 set omnifunc=syntaxcomplete#Complete
-"set list
 syntax on
-colorscheme sonokai
+colorscheme gruvbox
 set mouse=nicr
 set guifont=Consolas:h14
 set guioptions+=b
-set wrap!
-" set sidescroll=1
 
 nnoremap <C-F> :promptfind <Enter>
-" nnoremap <S-ScrollWheelUp>   <ScrollWheelLeft>
-" nnoremap <S-2-ScrollWheelUp> <2-ScrollWheelLeft>
-" nnoremap <S-3-ScrollWheelUp> <3-ScrollWheelLeft>
-" nnoremap <S-4-ScrollWheelUp> <4-ScrollWheelLeft>
-" nnoremap <S-ScrollWheelDown>     <ScrollWheelRight>
-" nnoremap <S-2-ScrollWheelDown>   <2-ScrollWheelRight>
-" nnoremap <S-3-ScrollWheelDown>   <3-ScrollWheelRight>
-" nnoremap <S-4-ScrollWheelDown>   <4-ScrollWheelRight>
-
-" qnmap <LeftMouse> <nop>
-" qimap <LeftMouse> <nop>
-" qvmap <LeftMouse> <nop>
-" qnmap <2-LeftMouse> <nop>
-" qnmap <3-LeftMouse> <nop>
-
-" Tmap 'ls' 
-"AirlineToggleWhiteSpace
-"
-"NerdTree Toggle
-map <C-o> :NERDTreeToggle<CR>
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-
-"autocmd BufWinLeave *.* mkview!
-"autocmd BufWinEnter *.* silent loadview
-
 if &term =~ "xterm"
      "set term=xterm-256color
      set t_Co=256
@@ -137,3 +109,125 @@ let g:airline_right_sep=''
 
 "let g:airline_powerline_fonts = 1
 "autocmd VimEnter * E
+"
+
+" Enable mouse support in all modes
+set mouse=a
+
+" Map middle-click to close tab under cursor
+nnoremap <silent> <expr> <MiddleMouse> TabCloseMiddleClick()
+
+function! TabCloseMiddleClick()
+    " Get the tab number under cursor
+    let tabnum = tabpagenr('$')
+    let curtab = tabpagenr()
+    
+    " Loop through tabs to find the one under the mouse cursor
+    for i in range(1, tabnum)
+        if getmousepos().tabnr == i
+            " Switch to the tab under the cursor and close it
+            execute "tabnext " . i
+            execute "tabclose"
+            
+            " If we were on a tab after the one closed, adjust position
+            if curtab > i && curtab > 1
+                execute "tabnext " . (curtab - 1)
+            elseif curtab == i && tabpagenr('$') >= curtab
+                execute "tabnext " . curtab
+            elseif curtab == i
+                execute "tabnext " . tabpagenr('$')
+            else
+                execute "tabnext " . curtab
+            endif
+            
+            return ''
+        endif
+    endfor
+    
+    return ''
+endfunction
+
+let loaded_matchparen=1
+
+let g:vimtex_quickfix_mode = 2
+let g:vimtex_quickfix_open_on_warning = 0
+let g:vimtex_view_automatic = 0
+" let g:vimtex_quickfix_autoclose_after_keystrokes = 3
+"
+autocmd QuickFixCmdPost * cwindow 10
+ 
+" Disable vimtex indentation
+let g:vimtex_indent_enabled = 0
+let g:vimtex_indent_bib_enabled = 0
+
+" Clear vimtex's indentexpr setting
+augroup DisableVimtexIndent
+    autocmd!
+    autocmd FileType tex setlocal indentexpr=
+    autocmd FileType tex setlocal autoindent&
+    autocmd FileType tex setlocal smartindent&
+    autocmd FileType tex setlocal cindent&
+augroup END
+
+" Alternative: Completely disable ALL indentation for tex files
+augroup NoTexIndent
+    autocmd!
+    autocmd FileType tex setlocal noautoindent
+    autocmd FileType tex setlocal nosmartindent
+    autocmd FileType tex setlocal nocindent
+    autocmd FileType tex setlocal indentexpr=
+augroup END
+
+" Enable soft wrapping
+set wrap
+" Make wrapped lines visually indented
+set breakindent
+" Show a visual indicator for wrapped lines
+set showbreak=>>\ 
+" Break at word boundaries rather than in the middle of words
+set linebreak
+
+" UltiSnips configuration
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" Tell UltiSnips where to look for snippets
+let g:UltiSnipsSnippetDirectories=[$HOME.'/vimfiles/UltiSnips']
+
+set noautoindent
+set nocindent
+set nosmartindent
+set scrolloff=2
+
+" Basic delimitMate configuration
+let delimitMate_matchpairs = "(:),[:],{:}"
+" Add quotes and self-matching characters (including pipe and dollar)
+let delimitMate_quotes = "\" `"
+let delimitMate_expand_cr = 1
+let delimitMate_expand_space = 1
+
+" Map c\ to delete rest of line and insert two backslashes
+nnoremap c\ C\\<Left><Left>
+
+" Map c\ to delete rest of line and insert two backslashes
+nnoremap d> dt>
+
+" Map leader+sv to source _vimrc
+nnoremap <leader>sv :w<CR>:source $MYVIMRC<CR>:echo "File saved and Vim configuration reloaded!"<CR>
+
+nnoremap <leader>m :MRU<CR>
+inoremap <C-e> <C-x><C-e>
+inoremap <C-y> <C-x><C-y>
+
+nnoremap q <leader>le
+nnoremap <leader>w :w<CR>:echo "File saved!"<CR>
+
+set complete=.
+set iskeyword-=:
+
+if has('gui_running')
+    nnoremap <C-s> :w<CR>:echo "File saved!"<CR>
+    inoremap <C-s> <Esc>:w<CR>:echo "File saved!"<CR>a
+    vnoremap <C-s> <Esc>:w<CR>:echo "File saved!"<CR>
+endif
