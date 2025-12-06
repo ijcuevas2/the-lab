@@ -45,7 +45,7 @@ call plug#end()
 let g:auto_save = 1  " enable AutoSave on Vim startup
 
 set nu
-set rnu
+" set rnu
 set tabstop=2
 set shiftwidth=2
 set ignorecase
